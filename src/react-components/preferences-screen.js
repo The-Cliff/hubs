@@ -10,7 +10,7 @@ import styles from "../assets/stylesheets/preferences-screen.scss";
 import { AVAILABLE_LOCALES } from "../assets/locales/locale_config";
 import { themes } from "../utils/theme";
 import MediaDevicesManager from "../utils/media-devices-manager";
-import { MediaDevicesEvents } from "../utils/media-devices-utils";
+import { MediaDevices, MediaDevicesEvents, PermissionStatus } from "../utils/media-devices-utils";
 import { Slider } from "./input/Slider";
 import {
   addOrientationChangeListener,
@@ -885,6 +885,7 @@ class PreferencesScreen extends Component {
     }));
     const preferredSpeakers = { ...this.state.preferredSpeakers };
     preferredSpeakers.options = speakersOptions?.length > 0 ? speakersOptions : [{ value: "none", text: "None" }];
+    preferredSpeakers.disabled = !this.state.canVoiceChat && this.mediaDevicesManager.getPermissionsStatus(MediaDevices.SPEAKERS) !== PermissionStatus.GRANTED;
 
     // Video devices update
     const videoOptions = this.mediaDevicesManager.videoDevicesOptions.map(device => ({
@@ -930,7 +931,11 @@ class PreferencesScreen extends Component {
     this.mediaDevicesManager.on(MediaDevicesEvents.DEVICE_CHANGE, this.onMediaDevicesUpdated);
     APP.hubChannel.addEventListener("permissions_updated", this.permissionsUpdated);
 
-    this.state.canVoiceChat && this.mediaDevicesManager.fetchMediaDevices().then(this.updateMediaDevices);
+    if (this.state.canVoiceChat) {
+      this.mediaDevicesManager.startMicShare({ updatePrefs: false }).then(this.updateMediaDevices);
+    } else {
+      this.updateMediaDevices();
+    }
   }
 
   componentWillUnmount() {
@@ -1062,8 +1067,7 @@ class PreferencesScreen extends Component {
             min: GLOBAL_VOLUME_MIN,
             max: GLOBAL_VOLUME_MAX,
             step: GLOBAL_VOLUME_STEP,
-            digits: 0,
-            disabled: !this.state.canVoiceChat
+            digits: 0
           },
           {
             key: "globalMediaVolume",
