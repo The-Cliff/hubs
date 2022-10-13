@@ -53,6 +53,7 @@ import { deleteEntitySystem } from "../bit-systems/delete-entity-system";
 import type { HubsSystems } from "aframe";
 import { Camera, Scene, WebGLRenderer } from "three";
 import { HubsWorld } from "../app";
+import { sceneLoadingSystem } from "../bit-systems/scene-loading";
 
 declare global {
   interface Window {
@@ -158,6 +159,7 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
 
   networkReceiveSystem(world);
   onOwnershipLost(world);
+  sceneLoadingSystem(world);
   mediaLoadingSystem(world);
 
   physicsCompatSystem(world);
