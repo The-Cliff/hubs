@@ -24,6 +24,7 @@ import { AudioSettings, SourceType } from "./components/audio-params";
 import { DialogAdapter } from "./naf-dialog-adapter";
 import { mainTick } from "./systems/hubs-systems";
 import { waitForPreloads } from "./utils/preload";
+import SceneEntryManager from "./scene-entry-manager";
 
 declare global {
   interface Window {
@@ -55,6 +56,7 @@ export class App {
   scene?: AScene;
   hubChannel?: HubChannel;
   mediaDevicesManager?: MediaDevicesManager;
+  entryManager?: SceneEntryManager;
 
   store = new Store();
   mediaSearchStore = new MediaSearchStore();
