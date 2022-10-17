@@ -24,7 +24,7 @@ import {
 
 import dropdownArrowUrl from "../assets/images/dropdown_arrow.png";
 import dropdownArrow2xUrl from "../assets/images/dropdown_arrow@2x.png";
-import { PermissionMessage } from "./room/PermissionsMessages";
+import { PermissionNotification } from "./room/PermissionNotifications";
 
 export const CLIPPING_THRESHOLD_MIN = 0.0;
 export const CLIPPING_THRESHOLD_MAX = 0.1;
@@ -1056,7 +1056,7 @@ class PreferencesScreen extends Component {
           ...(!this.state.canVoiceChat ? [{
             key: "voiceChatPinnedMessage",
             prefType: PREFERENCE_LIST_ITEM_TYPE.CUSTOM_COMPONENT,
-            componentType: PermissionMessage,
+            componentType: PermissionNotification,
             permission: "voice_chat"
           }] : []),
           ...(MediaDevicesManager.isAudioInputSelectEnabled ? [this.state.preferredMic] : []),
