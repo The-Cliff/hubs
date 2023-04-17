@@ -208,28 +208,25 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 
-
-import {ftrKeypadClass} from  "./metaoffice/ftr_keypad.js"
-import {ftrPetClass} from  "./metaoffice/ftr_pet.js"
-import {ftrNftShopClass} from  "./metaoffice/ftr_nftshop.js"
-import {ftrScreenClass} from  "./metaoffice/ftr_screen.js"
-import {ftrBackgroundMusicClass} from  "./metaoffice/ftr_backgroundmusic.js"
+import { ftrKeypadClass } from "./metaoffice/ftr_keypad.js";
+import { ftrPetClass } from "./metaoffice/ftr_pet.js";
+import { ftrNftShopClass } from "./metaoffice/ftr_nftshop.js";
+import { ftrScreenClass } from "./metaoffice/ftr_screen.js";
+import { ftrBackgroundMusicClass } from "./metaoffice/ftr_backgroundmusic.js";
 
 window.role = "guest";
-if(qs.has("role"))
-	window.role = qs.get("role")
+if (qs.has("role")) window.role = qs.get("role");
 
 window.listFeatures = [];
 
- window.isNftShopOpen = false;
+window.isNftShopOpen = false;
 
 window.room = "test-local";
-if(window.location.href.includes("ispd-showroom")) window.room = "showroom";
-if(window.location.href.includes("ispd-sala1")) window.room = "meeting_1";
-if(window.location.href.includes("ispd-sala2")) window.room = "meeting_2";
-if(window.location.href.includes("ispd-sala3")) window.room = "meeting_3";
-if(window.location.href.includes("ispd-terraza")) window.room = "rooftop";
-
+if (window.location.href.includes("ispd-showroom")) window.room = "showroom";
+if (window.location.href.includes("ispd-sala1")) window.room = "meeting_1";
+if (window.location.href.includes("ispd-sala2")) window.room = "meeting_2";
+if (window.location.href.includes("ispd-sala3")) window.room = "meeting_3";
+if (window.location.href.includes("ispd-terraza")) window.room = "rooftop";
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -1393,118 +1390,109 @@ document.addEventListener("DOMContentLoaded", async () => {
   authChannel.setSocket(socket);
   linkChannel.setSocket(socket);
 
+  // O] Preferences
+  if (window.room === "rooftop") store.update({ preferences: { enableDynamicShadows: false } });
+  else store.update({ preferences: { enableDynamicShadows: true } });
 
-    // O] Preferences
-		if(window.room === "rooftop")
-			store.update({ preferences: { enableDynamicShadows: false } });
-		else
-			store.update({ preferences: { enableDynamicShadows: true } });
+  // A] Key pad
+  let ftrKeypad = new ftrKeypadClass();
+  ftrKeypad.init();
+  window.listFeatures.push(ftrKeypad);
 
-		// A] Key pad
-	let ftrKeypad = new ftrKeypadClass();
-	ftrKeypad.init();
-	window.listFeatures.push( ftrKeypad );
+  let updatePointer = () => {
+    ftrKeypad.pointer.x = (event.clientX / document.getElementsByTagName("canvas")[0].offsetWidth) * 2 - 1;
+    ftrKeypad.pointer.y = -(event.clientY / document.getElementsByTagName("canvas")[0].offsetHeight) * 2 + 1;
+  };
 
-	let updatePointer = () => {
-		ftrKeypad.pointer.x = ( event.clientX / document.getElementsByTagName("canvas")[0].offsetWidth) * 2 - 1;
-		ftrKeypad.pointer.y = - ( event.clientY / document.getElementsByTagName("canvas")[0].offsetHeight ) * 2 + 1;
-	}
+  let updateScreenText = () => {
+    // 1) Check keypad for correct code
+    if (ftrKeypad.keypadOrPanel && ftrKeypad.toAdd !== "") {
+      ftrKeypad.screen.object3D.children[0].material.color.set("#000000");
 
-	let updateScreenText = () => {
+      if (ftrKeypad.screen.children[0].components.text.troikaTextMesh.text.length > 3)
+        ftrKeypad.screen.children[0].components.text.troikaTextMesh.text = "";
 
-		// 1) Check keypad for correct code
-		if(ftrKeypad.keypadOrPanel && ftrKeypad.toAdd !== "") {
+      ftrKeypad.screen.children[0].components.text.troikaTextMesh.text =
+        ftrKeypad.screen.children[0].components.text.troikaTextMesh.text + ftrKeypad.toAdd;
 
-			ftrKeypad.screen.object3D.children[0].material.color.set("#000000")
+      if (ftrKeypad.screen.children[0].components.text.troikaTextMesh.text.length > 3) {
+        if (ftrKeypad.screen.children[0].components.text.troikaTextMesh.text !== "3846") {
+          ftrKeypad.screen.object3D.children[0].material.color.set("#FF0000");
+        } else {
+          ftrKeypad.screen.object3D.visible = false;
 
-			if(ftrKeypad.screen.children[0].components.text.troikaTextMesh.text.length > 3)
-				ftrKeypad.screen.children[0].components.text.troikaTextMesh.text = ""
+          for (const butt of ftrKeypad.listButt) butt.visible = false;
+          for (let i = 1; i < 11; ++i) {
+            ftrKeypad.grpElt.children[i].object3D.visible = false;
+          }
 
-			ftrKeypad.screen.children[0].components.text.troikaTextMesh.text =
-			ftrKeypad.screen.children[0].components.text.troikaTextMesh.text + ftrKeypad.toAdd;
-
-			if(ftrKeypad.screen.children[0].components.text.troikaTextMesh.text.length > 3)  {
-				if(ftrKeypad.screen.children[0].components.text.troikaTextMesh.text !== "3846") {
-					ftrKeypad.screen.object3D.children[0].material.color.set("#FF0000")
-				} else {
-					ftrKeypad.screen.object3D.visible = false;
-
-					for(const butt of ftrKeypad.listButt)
-						butt.visible = false;
-					for(let i = 1; i < 11; ++i) {
-						ftrKeypad.grpElt.children[i].object3D.visible = false;
-					}
-
-					ftrKeypad.panel.object3D.visible = true;
-					ftrKeypad.keypadOrPanel = false;
-				}
-			}
-		}
-
-		// ) Redirect to page
-		if(!ftrKeypad.keypadOrPanel && ftrKeypad.toLink !== "") {
-			let linkRole = "";
-			if(window.role !== "guest")
-				linkRole = "?role=" + window.role;
-
-      let toShowroom = ftrKeypad.toLink.includes("showroom")
-
-			window.location = ftrKeypad.toLink + linkRole + (toShowroom ? "#wpmainshowroom" : "");
-		}
-
-	}
-	document.addEventListener( 'mousemove', updatePointer );
-	document.addEventListener( 'mousedown', updateScreenText );
-
-
-		// B] Screen
-	if(window.role === "speaker" && (window.room === "meeting_1" || window.room === "meeting_2" || window.room === "meeting_3") ) {
-		let ftrScreen = new ftrScreenClass();
-		ftrScreen.init();
-		window.listFeatures.push( ftrScreen );
-	}
-
-		// C] Nft Shop
-	if(window.room === "showroom") {
-		let ftrNftShop = new ftrNftShopClass();
-		ftrNftShop.init();
-		window.listFeatures.push( ftrNftShop );
-	}
-
-		// D] Background music
-	if(true) {
-		let ftrBackgroundMusic = new ftrBackgroundMusicClass();
-		ftrBackgroundMusic.init();
-		window.listFeatures.push( ftrBackgroundMusic );
-	}
-
-		// E] Pet
-  if(qs.has("pet")) {
-		let ftrPet = new ftrPetClass();
-		ftrPet.init();
-		window.listFeatures.push( ftrPet );
-
-    let updatePointerPet = (i) => {
-      ftrPet.pointer.x = ( event.clientX / document.getElementsByTagName("canvas")[0].offsetWidth) * 2 - 1;
-      ftrPet.pointer.y = - ( event.clientY / document.getElementsByTagName("canvas")[0].offsetHeight ) * 2 + 1;
-    }
-
-    let updatePet = () => {
-      if(ftrPet.animToPlay != -1) {
-        ftrPet.playAnim(ftrPet.animToPlay)
-			  ftrPet.animToPlay = -1;
+          ftrKeypad.panel.object3D.visible = true;
+          ftrKeypad.keypadOrPanel = false;
+        }
       }
     }
 
-    document.addEventListener( 'mousemove', updatePointerPet );
-    document.addEventListener( 'mousedown', updatePet );
+    // ) Redirect to page
+    if (!ftrKeypad.keypadOrPanel && ftrKeypad.toLink !== "") {
+      let linkRole = "";
+      if (window.role !== "guest") linkRole = "?role=" + window.role;
 
-	}
+      let toShowroom = ftrKeypad.toLink.includes("showroom");
 
-	// The big Loop, 
-	setInterval(() => {
-		window.listFeatures.forEach( _ftr => _ftr.tick() )
-	}, 60); // Should be a tick in AFRAME
+      window.location = ftrKeypad.toLink + linkRole + (toShowroom ? "#wpmainshowroom" : "");
+    }
+  };
+  document.addEventListener("mousemove", updatePointer);
+  document.addEventListener("mousedown", updateScreenText);
 
+  // B] Screen
+  if (
+    window.role === "speaker" &&
+    (window.room === "meeting_1" || window.room === "meeting_2" || window.room === "meeting_3")
+  ) {
+    let ftrScreen = new ftrScreenClass();
+    ftrScreen.init();
+    window.listFeatures.push(ftrScreen);
+  }
 
+  // C] Nft Shop
+  if (window.room === "showroom") {
+    let ftrNftShop = new ftrNftShopClass();
+    ftrNftShop.init();
+    window.listFeatures.push(ftrNftShop);
+  }
+
+  // D] Background music
+  if (true) {
+    let ftrBackgroundMusic = new ftrBackgroundMusicClass();
+    ftrBackgroundMusic.init();
+    window.listFeatures.push(ftrBackgroundMusic);
+  }
+
+  // E] Pet
+  if (qs.has("pet")) {
+    let ftrPet = new ftrPetClass();
+    ftrPet.init();
+    window.listFeatures.push(ftrPet);
+
+    let updatePointerPet = i => {
+      ftrPet.pointer.x = (event.clientX / document.getElementsByTagName("canvas")[0].offsetWidth) * 2 - 1;
+      ftrPet.pointer.y = -(event.clientY / document.getElementsByTagName("canvas")[0].offsetHeight) * 2 + 1;
+    };
+
+    let updatePet = () => {
+      if (ftrPet.animToPlay != -1) {
+        ftrPet.playAnim(ftrPet.animToPlay);
+        ftrPet.animToPlay = -1;
+      }
+    };
+
+    document.addEventListener("mousemove", updatePointerPet);
+    document.addEventListener("mousedown", updatePet);
+  }
+
+  // The big Loop,
+  setInterval(() => {
+    window.listFeatures.forEach(_ftr => _ftr.tick());
+  }, 60); // Should be a tick in AFRAME
 });

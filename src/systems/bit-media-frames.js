@@ -126,14 +126,7 @@ function setMatrixScale(obj, scaleArray) {
   const m4 = new THREE.Matrix4();
   obj.updateMatrices();
   obj.matrixWorld.decompose(position, quaternion, scale);
-  setMatrixWorld(
-    obj,
-    m4.compose(
-      position,
-      quaternion,
-      scale.fromArray(scaleArray)
-    )
-  );
+  setMatrixWorld(obj, m4.compose(position, quaternion, scale.fromArray(scaleArray)));
 }
 
 function cloneForPreview(world, eid) {
@@ -142,7 +135,7 @@ function cloneForPreview(world, eid) {
   const mesh = el.getObject3D("mesh");
   const meshClone = cloneObject3D(mesh, false);
   meshClone.traverse(node => {
-    updateMaterials(node, function(srcMat) {
+    updateMaterials(node, function (srcMat) {
       const mat = srcMat.clone();
       mat.transparent = true;
       mat.opacity = 0.5;
@@ -272,7 +265,9 @@ export function mediaFramesSystem(world) {
 
     if (
       NetworkedMediaFrame.capturedNid[frame] !== MediaFrame.capturedNid[frame] &&
-      (captured && entityExists(world, captured) && hasComponent(world, Owned, captured))
+      captured &&
+      entityExists(world, captured) &&
+      hasComponent(world, Owned, captured)
     ) {
       // TODO: If you are resetting scale because you lost a race for the frame,
       //       you should probably also move the object away from the frame.

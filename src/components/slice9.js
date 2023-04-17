@@ -69,7 +69,7 @@ AFRAME.registerComponent("slice9", {
     uvAtlasMax: { type: "vec2" }
   },
 
-  init: function() {
+  init: function () {
     const data = this.data;
 
     this.textureSrc = null;
@@ -93,7 +93,7 @@ AFRAME.registerComponent("slice9", {
   },
 
   // TODO use updateSlice9Geometry
-  regenerateMesh: function() {
+  regenerateMesh: function () {
     const data = this.data;
     let height;
     const pos = this.geometry.attributes.position.array;
@@ -199,7 +199,7 @@ AFRAME.registerComponent("slice9", {
     this.geometry.attributes.uv.needsUpdate = true;
   },
 
-  update: function(oldData) {
+  update: function (oldData) {
     const data = this.data;
     const diff = AFRAME.utils.diff(data, oldData);
 
@@ -239,7 +239,7 @@ AFRAME.registerComponent("slice9", {
   /**
    * Update `src` if using built-in material.
    */
-  updateMap: function() {
+  updateMap: function () {
     const src = this.data.src;
 
     if (src) {

@@ -50,7 +50,13 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ChatMenuButton, ECSDebugMenuButton } from "./room/ContentMenu";
+import {
+  ContentMenu,
+  PeopleMenuButton,
+  ObjectsMenuButton,
+  ChatMenuButton,
+  ECSDebugMenuButton
+} from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -1113,16 +1119,17 @@ class UIRoot extends Component {
                 icon: EnterIcon,
                 onClick: () => this.showContextualSignInDialog()
               },
-          false && canCreateRoom && {
-            id: "create-room",
-            label: <FormattedMessage id="more-menu.create-room" defaultMessage="Create Room" />,
-            icon: AddIcon,
-            onClick: () =>
-              this.showNonHistoriedDialog(LeaveRoomModal, {
-                destinationUrl: "/",
-                reason: LeaveReason.createRoom
-              })
-          },
+          false &&
+            canCreateRoom && {
+              id: "create-room",
+              label: <FormattedMessage id="more-menu.create-room" defaultMessage="Create Room" />,
+              icon: AddIcon,
+              onClick: () =>
+                this.showNonHistoriedDialog(LeaveRoomModal, {
+                  destinationUrl: "/",
+                  reason: LeaveReason.createRoom
+                })
+            },
           {
             id: "user-profile",
             label: <FormattedMessage id="more-menu.profile" defaultMessage="Change Name & Avatar" />,
@@ -1151,85 +1158,87 @@ class UIRoot extends Component {
           }
         ].filter(item => item)
       },
-      window.role == "admin" ? {
-        id: "room",
-        label: <FormattedMessage id="more-menu.room" defaultMessage="Room" />,
-        items: [
-          {
-            id: "room-info",
-            label: <FormattedMessage id="more-menu.room-info" defaultMessage="Room Info and Settings" />,
-            icon: HomeIcon,
-            onClick: () => this.setSidebar("room-info")
-          },
-          false && (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
-              id: "invite",
-              label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
-              icon: InviteIcon,
-              onClick: () => this.props.scene.emit("action_invite")
-            },
-          this.isFavorited()
-            ? false && {
-                id: "unfavorite-room",
-                label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
-                icon: StarIcon,
-                onClick: () => this.toggleFavorited()
-              }
-            : false && {
-                id: "favorite-room",
-                label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
-                icon: StarOutlineIcon,
-                onClick: () => this.toggleFavorited()
+      window.role == "admin"
+        ? {
+            id: "room",
+            label: <FormattedMessage id="more-menu.room" defaultMessage="Room" />,
+            items: [
+              {
+                id: "room-info",
+                label: <FormattedMessage id="more-menu.room-info" defaultMessage="Room Info and Settings" />,
+                icon: HomeIcon,
+                onClick: () => this.setSidebar("room-info")
               },
-          isModerator &&
-            entered && {
-              id: "streamer-mode",
-              label: streaming ? (
-                <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
-              ) : (
-                <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
-              ),
-              icon: CameraIcon,
-              onClick: () => this.toggleStreamerMode()
-            },
-          false && (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            entered && {
-              id: "leave-room",
-              label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
-              icon: LeaveIcon,
-              onClick: () => {
-                this.showNonHistoriedDialog(LeaveRoomModal, {
-                  destinationUrl: "/",
-                  reason: LeaveReason.leaveRoom
-                });
-              }
-            },
-          false && canCloseRoom && {
-            id: "close-room",
-            label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
-            icon: DeleteIcon,
-            onClick: () =>
-              this.props.performConditionalSignIn(
-                () => this.props.hubChannel.can("update_hub"),
-                () => {
-                  this.showNonHistoriedDialog(CloseRoomModal, {
-                    roomName: this.props.hub.name,
-                    onConfirm: () => {
-                      this.props.hubChannel.closeHub();
-                    }
-                  });
+              false &&
+                (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
+                (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
+                  id: "invite",
+                  label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
+                  icon: InviteIcon,
+                  onClick: () => this.props.scene.emit("action_invite")
                 },
-                SignInMessages.closeRoom
-              )
+              this.isFavorited()
+                ? false && {
+                    id: "unfavorite-room",
+                    label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
+                    icon: StarIcon,
+                    onClick: () => this.toggleFavorited()
+                  }
+                : false && {
+                    id: "favorite-room",
+                    label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
+                    icon: StarOutlineIcon,
+                    onClick: () => this.toggleFavorited()
+                  },
+              isModerator &&
+                entered && {
+                  id: "streamer-mode",
+                  label: streaming ? (
+                    <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
+                  ) : (
+                    <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
+                  ),
+                  icon: CameraIcon,
+                  onClick: () => this.toggleStreamerMode()
+                },
+              false &&
+                (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
+                entered && {
+                  id: "leave-room",
+                  label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
+                  icon: LeaveIcon,
+                  onClick: () => {
+                    this.showNonHistoriedDialog(LeaveRoomModal, {
+                      destinationUrl: "/",
+                      reason: LeaveReason.leaveRoom
+                    });
+                  }
+                },
+              false &&
+                canCloseRoom && {
+                  id: "close-room",
+                  label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
+                  icon: DeleteIcon,
+                  onClick: () =>
+                    this.props.performConditionalSignIn(
+                      () => this.props.hubChannel.can("update_hub"),
+                      () => {
+                        this.showNonHistoriedDialog(CloseRoomModal, {
+                          roomName: this.props.hub.name,
+                          onConfirm: () => {
+                            this.props.hubChannel.closeHub();
+                          }
+                        });
+                      },
+                      SignInMessages.closeRoom
+                    )
+                }
+            ].filter(item => item)
           }
-        ].filter(item => item)
-      } :
-			{
-        id: "room",
-        items: [
-        ].filter(item => item)
-			}
-			,
+        : {
+            id: "room",
+            items: [].filter(item => item)
+          },
       {
         id: "support",
         label: <FormattedMessage id="more-menu.support" defaultMessage="Support" />,
@@ -1246,12 +1255,13 @@ class UIRoot extends Component {
             icon: WarningCircleIcon,
             href: configs.link("issue_report", "https://hubs.mozilla.com/docs/help.html")
           },
-          false && entered && {
-            id: "start-tour",
-            label: <FormattedMessage id="more-menu.start-tour" defaultMessage="Start Tour" />,
-            icon: SupportIcon,
-            onClick: () => this.props.scene.systems.tips.resetTips()
-          },
+          false &&
+            entered && {
+              id: "start-tour",
+              label: <FormattedMessage id="more-menu.start-tour" defaultMessage="Start Tour" />,
+              icon: SupportIcon,
+              onClick: () => this.props.scene.systems.tips.resetTips()
+            },
           configs.feature("show_docs_link") && {
             id: "help",
             label: <FormattedMessage id="more-menu.help" defaultMessage="Help" />,
@@ -1286,231 +1296,220 @@ class UIRoot extends Component {
       }
     ];
 
-
     // 2) Ready Player Me Avatar creation
 
-   let iframe
-    
-		// API
-		function subscribe(event) {
-			const json = parse(event);
+    let iframe;
 
-			if (json?.source !== 'readyplayerme') {
-				return;
-			}
+    // API
+    function subscribe(event) {
+      const json = parse(event);
 
-			if(json.eventName === "v1.avatar.exported") {
-				// Get name of glb
-				//console.log(json.data.url)
+      if (json?.source !== "readyplayerme") {
+        return;
+      }
+
+      if (json.eventName === "v1.avatar.exported") {
+        // Get name of glb
+        //console.log(json.data.url)
         const store = window.APP.store;
-        store.update({profile: { avatarId: json.data.url } }, null, "profile");
+        store.update({ profile: { avatarId: json.data.url } }, null, "profile");
         AFRAME.scenes[0].emit("avatar_updated");
 
-				window.closeRPM();
-			}
+        window.closeRPM();
+      }
 
-			
-			// Susbribe to all events sent from Ready Player Me once frame is ready
-			if (json.eventName === 'v1.frame.ready') {
-				iframe.contentWindow.postMessage(
-					JSON.stringify({
-						target: 'readyplayerme',
-						type: 'subscribe',
-						eventName: 'v1.**'
-					}),
-					'*'
-				);
-			}
+      // Susbribe to all events sent from Ready Player Me once frame is ready
+      if (json.eventName === "v1.frame.ready") {
+        iframe.contentWindow.postMessage(
+          JSON.stringify({
+            target: "readyplayerme",
+            type: "subscribe",
+            eventName: "v1.**"
+          }),
+          "*"
+        );
+      }
+    }
 
+    function parse(event) {
+      try {
+        return JSON.parse(event.data);
+      } catch (error) {
+        return null;
+      }
+    }
 
+    function displayIframe() {
+      document.getElementById("containerRPM").hidden = false;
+    }
 
-		}
+    let iframeNftShop;
 
-		function parse(event) {
-			try {
-				return JSON.parse(event.data);
-			} catch (error) {
-				return null;
-			}
-		}
+    window.openNftShop = () => {
+      if (window.isNftShopOpen) return;
 
-		function displayIframe() {
-			document.getElementById('containerRPM').hidden = false;
-		}
-
-
-   let iframeNftShop;
-
-		window.openNftShop = () => {
-
- 			if(window.isNftShopOpen)
-				return;
-
-			if(isMobileVR) {
-
+      if (isMobileVR) {
         AFRAME.scenes[0].exitVR().then(() => {
-					/*
+          /*
 			if (!nonFullscreen) {
 				await getUserGesture();
 				await showFullScreenIfAvailable();
 			}
 	*/
-					document.getElementById('overlayForCenter').style.display = "block";
+          document.getElementById("overlayForCenter").style.display = "block";
 
-					document.getElementById('containerNftShop').style.display = "block";
+          document.getElementById("containerNftShop").style.display = "block";
 
-					//document.getElementById("containerNftShop").style.display = "hidden";
-					iframeNftShop = document.getElementById('iframeNftShop')
-			 
-					if (!iframeNftShop) {
-						iframeNftShop = document.createElement('iframe')
-						document.getElementById("containerNftShop").appendChild(iframeNftShop)
-					}
+          //document.getElementById("containerNftShop").style.display = "hidden";
+          iframeNftShop = document.getElementById("iframeNftShop");
 
-					iframeNftShop.id = 'iframeNftShop'
-					iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com`
-					iframeNftShop.className = 'contentNftShop'
+          if (!iframeNftShop) {
+            iframeNftShop = document.createElement("iframe");
+            document.getElementById("containerNftShop").appendChild(iframeNftShop);
+          }
 
- 					window.isNftShopOpen = true;
-				});
+          iframeNftShop.id = "iframeNftShop";
+          iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com`;
+          iframeNftShop.className = "contentNftShop";
 
+          window.isNftShopOpen = true;
+        });
+      } else {
+        document.getElementById("overlayForCenter").style.display = "block";
 
-			} else {
+        document.getElementById("containerNftShop").style.display = "block";
 
-				document.getElementById('overlayForCenter').style.display = "block";
+        //document.getElementById("containerNftShop").style.display = "hidden";
+        iframeNftShop = document.getElementById("iframeNftShop");
 
-				document.getElementById('containerNftShop').style.display = "block";
+        if (!iframeNftShop) {
+          iframeNftShop = document.createElement("iframe");
+          document.getElementById("containerNftShop").appendChild(iframeNftShop);
+        }
 
-				//document.getElementById("containerNftShop").style.display = "hidden";
-				iframeNftShop = document.getElementById('iframeNftShop')
-		 
-				if (!iframeNftShop) {
-					iframeNftShop = document.createElement('iframe')
-					document.getElementById("containerNftShop").appendChild(iframeNftShop)
-				}
+        iframeNftShop.id = "iframeNftShop";
+        iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com`;
+        iframeNftShop.className = "contentNftShop";
 
-				iframeNftShop.id = 'iframeNftShop'
-				iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com`
-				iframeNftShop.className = 'contentNftShop'
+        window.isNftShopOpen = true;
+      }
+    };
 
- 				window.isNftShopOpen = true;
+    window.closeNftShop = () => {
+      if (!window.isNftShopOpen) return;
 
-			}
+      document.getElementById("overlayForCenter").style.display = "none";
+      if (document.getElementById("iframeNftShop") === null) return;
+      document.getElementById("containerNftShop").style.display = "none";
+      document.getElementById("iframeNftShop").remove();
 
-		}
+      window.isNftShopOpen = false;
 
-		window.closeNftShop = () => {
+      if (isMobileVR) {
+        exit2DInterstitialAndEnterVR(true);
+      }
+    };
 
- 			if(!window.isNftShopOpen)
-				return;
+    // ME
 
-			document.getElementById('overlayForCenter').style.display = "none";
-      if(document.getElementById('iframeNftShop') === null)
-        return;
-			document.getElementById('containerNftShop').style.display = "none";
-			document.getElementById("iframeNftShop").remove();
+    window.openRPM = () => {
+      document.getElementById("overlayForCenter").style.display = "block";
 
- 			window.isNftShopOpen = false;
+      const subdomain = "demo";
+      //const frame = document.getElementById('frame');
+      //frame.src = `https://${subdomain}.readyplayer.me/avatar?frameApi`;
 
-			if(isMobileVR) {
-      	exit2DInterstitialAndEnterVR(true);
-			}
+      document.getElementById("containerRPM").style.display = "block";
+      iframe = document.getElementById("iframeRPM");
 
-		}
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        document.getElementById("containerRPM").appendChild(iframe);
+      }
 
-		// ME
-		
-		window.openRPM = () => {
-							
-			document.getElementById('overlayForCenter').style.display = "block";
+      iframe.id = "iframeRPM";
+      iframe.src = `https://${subdomain}.readyplayer.me/avatar?frameApi`;
+      iframe.className = "contentRPM";
+      iframe.allow = "camera *; microphone *";
 
-			const subdomain = 'demo';
-			//const frame = document.getElementById('frame');
-			//frame.src = `https://${subdomain}.readyplayer.me/avatar?frameApi`;
+      window.addEventListener("message", subscribe);
+      document.addEventListener("message", subscribe);
+    };
 
-			document.getElementById("containerRPM").style.display = "block";
-			iframe = document.getElementById('iframeRPM')
-	 
-			if (!iframe) {
-				iframe = document.createElement('iframe')
-				document.getElementById("containerRPM").appendChild(iframe)
-			}
+    window.closeRPM = () => {
+      document.getElementById("overlayForCenter").style.display = "none";
+      if (document.getElementById("iframeRPM") === null) return;
+      document.getElementById("containerRPM").style.display = "none";
 
-			iframe.id = 'iframeRPM'
-			iframe.src = `https://${subdomain}.readyplayer.me/avatar?frameApi`
-			iframe.className = 'contentRPM'
-			iframe.allow = 'camera *; microphone *'
-			
-			window.addEventListener('message', subscribe);
-			document.addEventListener('message', subscribe);
-
-		}
-		
-		window.closeRPM = () => {
-			document.getElementById('overlayForCenter').style.display = "none";
-      if(document.getElementById('iframeRPM') === null)
-        return;
-      document.getElementById('containerRPM').style.display = "none";
-    
-      window.removeEventListener("message", subscribe)
-      document.removeEventListener("message", subscribe)
+      window.removeEventListener("message", subscribe);
+      document.removeEventListener("message", subscribe);
       document.getElementById("iframeRPM").remove();
-			
-		}
-
+    };
 
     window.closeAll = () => {
       window.closeRPM();
       window.closeNftShop();
-    }
+    };
 
-
-	  // romamilend
+    // romamilend
 
     return (
       <MoreMenuContextProvider>
         <ReactAudioContext.Provider value={this.state.audioContext}>
-          <div className="container" id="containerNftShop" style={{ "display":"none","pointerEvents": "auto", "userSelect": "none", "width" :"calc(100vh * 16 / 9 )", "height": "80%"}}></div>
-          <div className="container" id="containerRPM" style={{ "display":"none","pointerEvents": "auto", "userSelect": "none", "width":"40%", "height":"60%"}}></div>
+          <div
+            className="container"
+            id="containerNftShop"
+            style={{
+              display: "none",
+              pointerEvents: "auto",
+              userSelect: "none",
+              width: "calc(100vh * 16 / 9 )",
+              height: "80%"
+            }}
+          ></div>
+          <div
+            className="container"
+            id="containerRPM"
+            style={{ display: "none", pointerEvents: "auto", userSelect: "none", width: "40%", height: "60%" }}
+          ></div>
 
-            <div id="overlayForCenter" class="overlay" onClick={() => window.closeAll()}></div>
+          <div id="overlayForCenter" class="overlay" onClick={() => window.closeAll()}></div>
 
-              <div className="bottomLeftMenu">
-                {entered && (
+          <div className="bottomLeftMenu">
+            {entered && (
+              <>
+                <MoreMenuPopoverButton style={{ marginLeft: "10px" }} menu={moreMenu} />
+                <AudioPopoverContainer scene={this.props.scene} />
+                {(window.role === "admin" || window.role === "speaker") && (
                   <>
-                   	<MoreMenuPopoverButton style={{marginLeft: "10px"}} menu={moreMenu} />
-                    <AudioPopoverContainer scene={this.props.scene} />
-                    {(window.role === "admin" || window.role === "speaker") && (
-											<>
-												<SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-												<PlacePopoverContainer
-													scene={this.props.scene}
-													hubChannel={this.props.hubChannel}
-													mediaSearchStore={this.props.mediaSearchStore}
-													showNonHistoriedDialog={this.showNonHistoriedDialog}
-													isOwner={this.props.presences[this.props.sessionId].metas[0].roles.owner}
-												/>
-											</>
-										)}
-                    {this.props.hubChannel.can("spawn_emoji") && ( 
-                          <ReactionPopoverContainer
-                            scene={this.props.scene}
-                            initialPresence={getPresenceProfileForSession(this.props.presences, this.props.sessionId)}
-                          />
-										)}
-
-										{isMobileVR && (
-												<ToolbarButton
-													icon={<VRIcon />}
-													preset="accept"
-													label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
-													onClick={() => exit2DInterstitialAndEnterVR(true)}
-												/>
-										)}
+                    <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
+                    <PlacePopoverContainer
+                      scene={this.props.scene}
+                      hubChannel={this.props.hubChannel}
+                      mediaSearchStore={this.props.mediaSearchStore}
+                      showNonHistoriedDialog={this.showNonHistoriedDialog}
+                      isOwner={this.props.presences[this.props.sessionId].metas[0].roles.owner}
+                    />
                   </>
                 )}
-              </div>
+                {this.props.hubChannel.can("spawn_emoji") && (
+                  <ReactionPopoverContainer
+                    scene={this.props.scene}
+                    initialPresence={getPresenceProfileForSession(this.props.presences, this.props.sessionId)}
+                  />
+                )}
 
+                {isMobileVR && (
+                  <ToolbarButton
+                    icon={<VRIcon />}
+                    preset="accept"
+                    label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
+                    onClick={() => exit2DInterstitialAndEnterVR(true)}
+                  />
+                )}
+              </>
+            )}
+          </div>
 
           <div className={classNames(rootStyles)}>
             {preload && this.props.hub && (
@@ -1835,7 +1834,7 @@ class UIRoot extends Component {
                         }}
                       />
                     )}
-                    {false && ( <MoreMenuPopoverButton menu={moreMenu} />)}
+                    {false && <MoreMenuPopoverButton menu={moreMenu} />}
                   </>
                 }
               />

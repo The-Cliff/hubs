@@ -20,7 +20,7 @@ export default {
   }
 };
 
-const nextTimestamp = (function() {
+const nextTimestamp = (function () {
   const now = Date.now();
   let time = now - 8 * 60 * 60 * 1000;
   return function nextTimeStamp() {

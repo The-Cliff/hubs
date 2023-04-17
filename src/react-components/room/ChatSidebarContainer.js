@@ -103,34 +103,31 @@ export function ChatContextProvider({ messageDispatch, children }) {
   const [messageGroups, setMessageGroups] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(false);
 
-  useEffect(
-    () => {
-      function onReceiveMessage(event) {
-        const newMessage = event.detail;
-        setMessageGroups(messages => updateMessageGroups(messages, newMessage));
+  useEffect(() => {
+    function onReceiveMessage(event) {
+      const newMessage = event.detail;
+      setMessageGroups(messages => updateMessageGroups(messages, newMessage));
 
-        if (
-          newMessage.type === "chat" ||
-          newMessage.type === "image" ||
-          newMessage.type === "photo" ||
-          newMessage.type === "video"
-        ) {
-          setUnreadMessages(true);
-        }
+      if (
+        newMessage.type === "chat" ||
+        newMessage.type === "image" ||
+        newMessage.type === "photo" ||
+        newMessage.type === "video"
+      ) {
+        setUnreadMessages(true);
       }
+    }
 
+    if (messageDispatch) {
+      messageDispatch.addEventListener("message", onReceiveMessage);
+    }
+
+    return () => {
       if (messageDispatch) {
-        messageDispatch.addEventListener("message", onReceiveMessage);
+        messageDispatch.removeEventListener("message", onReceiveMessage);
       }
-
-      return () => {
-        if (messageDispatch) {
-          messageDispatch.removeEventListener("message", onReceiveMessage);
-        }
-      };
-    },
-    [messageDispatch, setMessageGroups, setUnreadMessages]
-  );
+    };
+  }, [messageDispatch, setMessageGroups, setUnreadMessages]);
 
   const sendMessage = useCallback(
     message => {
@@ -141,12 +138,9 @@ export function ChatContextProvider({ messageDispatch, children }) {
     [messageDispatch]
   );
 
-  const setMessagesRead = useCallback(
-    () => {
-      setUnreadMessages(false);
-    },
-    [setUnreadMessages]
-  );
+  const setMessagesRead = useCallback(() => {
+    setUnreadMessages(false);
+  }, [setUnreadMessages]);
 
   return (
     <ChatContext.Provider value={{ messageGroups, unreadMessages, sendMessage, setMessagesRead }}>
@@ -190,13 +184,10 @@ export function ChatSidebarContainer({ scene, canSpawnMessages, presences, occup
     [sendMessage, setMessage, onClose]
   );
 
-  const onSendMessage = useCallback(
-    () => {
-      sendMessage(message.substring(0, MAX_MESSAGE_LENGTH));
-      setMessage("");
-    },
-    [message, sendMessage, setMessage]
-  );
+  const onSendMessage = useCallback(() => {
+    sendMessage(message.substring(0, MAX_MESSAGE_LENGTH));
+    setMessage("");
+  }, [message, sendMessage, setMessage]);
 
   const onSpawnMessage = () => {
     spawnChatMessage(message);
@@ -227,14 +218,11 @@ export function ChatSidebarContainer({ scene, canSpawnMessages, presences, occup
 
   useEffect(() => inputEffect(inputRef.current), [inputEffect, inputRef]);
 
-  useEffect(
-    () => {
-      if (scrolledToBottom) {
-        setMessagesRead();
-      }
-    },
-    [messageGroups, scrolledToBottom, setMessagesRead]
-  );
+  useEffect(() => {
+    if (scrolledToBottom) {
+      setMessagesRead();
+    }
+  }, [messageGroups, scrolledToBottom, setMessagesRead]);
 
   const discordBridges = discordBridgesForPresences(presences);
   const discordSnippet = discordBridges.map(ch => "#" + ch).join(", ");

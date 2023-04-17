@@ -7,10 +7,12 @@ const getTimeOffsetToServer = async () => {
   const clientSentTime = Date.now();
   const serverReceivedTime =
     new Date(
-      (await fetch(document.location.href, {
-        method: "HEAD",
-        cache: "no-cache"
-      })).headers.get("Date")
+      (
+        await fetch(document.location.href, {
+          method: "HEAD",
+          cache: "no-cache"
+        })
+      ).headers.get("Date")
     ).getTime() +
     precision / 2;
   const clientReceivedTime = Date.now();
@@ -73,8 +75,14 @@ export default class PhoenixAdapter {
     this.unreliableTransport = transportForChannel(this.hubChannel.channel, false);
 
     this.hubChannel.presence.list(key => key).forEach(this.nafOccupantJoined);
-    this.refs.set("hub:join", this.events.on(`hub:join`, ({ key }) => this.nafOccupantJoined(key)));
-    this.refs.set("hub:leave", this.events.on(`hub:leave`, ({ key }) => this.nafOccupantLeave(key)));
+    this.refs.set(
+      "hub:join",
+      this.events.on(`hub:join`, ({ key }) => this.nafOccupantJoined(key))
+    );
+    this.refs.set(
+      "hub:leave",
+      this.events.on(`hub:leave`, ({ key }) => this.nafOccupantLeave(key))
+    );
   }
   shouldStartConnectionTo() {}
   startStreamConnection() {}

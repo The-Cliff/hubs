@@ -122,14 +122,13 @@ export function SceneInfo({ accountId, scene, showAttributions, canChangeScene, 
           />
         </div>
       </div>
-      {showAttributions &&
-        filteredAttributionElements.length > 0 && (
-          <InputField
-            label={<FormattedMessage id="room-sidebar.scene-info.attributions" defaultMessage="Attributions" />}
-          >
-            <ul className={styles.attributions}>{filteredAttributionElements}</ul>
-          </InputField>
-        )}
+      {showAttributions && filteredAttributionElements.length > 0 && (
+        <InputField
+          label={<FormattedMessage id="room-sidebar.scene-info.attributions" defaultMessage="Attributions" />}
+        >
+          <ul className={styles.attributions}>{filteredAttributionElements}</ul>
+        </InputField>
+      )}
       {changeSceneButton}
     </>
   );

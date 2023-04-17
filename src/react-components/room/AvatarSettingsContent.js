@@ -36,9 +36,9 @@ export function AvatarSettingsContent({
       />
       <div className={styles.avatarPreviewContainer}>
         {avatarPreview || <div />}
-				<Button type="button" preset="basic" onClick={window.openRPM}>
-					<FormattedMessage id="avatar-settings-content.create-avatar-button" defaultMessage="Create Avatar" />
-				</Button>
+        <Button type="button" preset="basic" onClick={window.openRPM}>
+          <FormattedMessage id="avatar-settings-content.create-avatar-button" defaultMessage="Create Avatar" />
+        </Button>
       </div>
       <AcceptButton preset="accept" type="submit" />
     </Column>

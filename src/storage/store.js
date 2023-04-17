@@ -14,7 +14,7 @@ import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identit
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
 import { getDefaultTheme } from "../utils/theme.js";
 
-const defaultMaterialQuality = (function() {
+const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
 
   // HACK: AFRAME is not available on all pages, so we catch the ReferenceError.

@@ -54,7 +54,7 @@ AFRAME.registerComponent("sprite", {
   }
 });
 
-const normalizedFrame = (function() {
+const normalizedFrame = (function () {
   const memo = new Map();
   return function normalizedFrame(name, spritesheet) {
     let ret = memo.get(name);
@@ -80,7 +80,7 @@ const normalizedFrame = (function() {
   };
 })();
 
-const raycastOnSprite = (function() {
+const raycastOnSprite = (function () {
   const vA = new THREE.Vector3();
   const vB = new THREE.Vector3();
   const vC = new THREE.Vector3();
@@ -254,7 +254,7 @@ export class SpriteSystem {
           });
         }
       }
-    }
+    };
 
     onThemeChanged(updateSprites);
   }

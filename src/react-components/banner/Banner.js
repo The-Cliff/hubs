@@ -197,7 +197,8 @@ const Banner = () => {
                     persists please reach out on our{" "}
                     <a href="https://discord.com/invite/dFJncWwHun" rel="noopener noreferrer" target="_blank">
                       Discord
-                    </a>.
+                    </a>
+                    .
                   </>
                 )
               }}

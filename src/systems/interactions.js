@@ -55,7 +55,7 @@ AFRAME.registerSystem("interaction", {
     );
   },
 
-  init: function() {
+  init: function () {
     this.options = {
       leftHand: {
         entity: null,

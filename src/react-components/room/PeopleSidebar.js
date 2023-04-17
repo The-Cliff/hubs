@@ -108,9 +108,7 @@ export function PeopleSidebar({ people, onSelectPerson, onClose, showMuteAll, on
           <IconButton onClick={onMuteAll}>
             <FormattedMessage id="people-sidebar.mute-all-button" defaultMessage="Mute All" />
           </IconButton>
-        ) : (
-          undefined
-        )
+        ) : undefined
       }
     >
       <List>

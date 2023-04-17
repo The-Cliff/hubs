@@ -170,7 +170,7 @@ function removeThemeChangedListener(listener) {
 // stash listeners until waitForDOMContentLoaded.
 const stashedThemeChangedListeners = new Set();
 function onThemeChanged(listener) {
-  const storeIsAvailable = !!(window.APP?.store);
+  const storeIsAvailable = !!window.APP?.store;
   if (storeIsAvailable) {
     registerThemeChangedListener(listener);
   } else {
@@ -237,5 +237,5 @@ export {
   onThemeChanged,
   registerDarkModeQuery,
   themes,
-  tryGetTheme,
+  tryGetTheme
 };

@@ -17,9 +17,7 @@ export const InputField = memo(
           <small className={styles.error}>{error}</small>
         ) : description ? (
           <small className={styles.info}>{description}</small>
-        ) : (
-          undefined
-        )}
+        ) : undefined}
       </div>
     );
   }

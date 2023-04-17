@@ -54,13 +54,13 @@ class RayCurve extends THREE.Mesh {
     this.width = width;
   }
 
-  setPoint = (function() {
+  setPoint = (function () {
     const A = new THREE.Vector3();
     const B = new THREE.Vector3();
     const C = new THREE.Vector3();
     const D = new THREE.Vector3();
 
-    return function(i, P) {
+    return function (i, P) {
       let idx = 3 * 6 * i;
 
       A.copy(P).add(this.direction);
@@ -130,7 +130,7 @@ function isValidNormalsAngle(collisionNormal, referenceNormal, landingMaxAngle) 
   return THREE.MathUtils.RAD2DEG * angleNormals <= landingMaxAngle;
 }
 
-const checkLineIntersection = (function() {
+const checkLineIntersection = (function () {
   const direction = new THREE.Vector3();
   return function checkLineIntersection(start, end, meshes, raycaster, referenceNormal, landingMaxAngle, hitPoint) {
     direction.copy(end).sub(start);
@@ -202,7 +202,7 @@ AFRAME.registerComponent("teleporter", {
     this.queryCollisionEntities();
   },
 
-  queryCollisionEntities: function() {
+  queryCollisionEntities: function () {
     this.collisionEntities = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.collisionEntities));
     this.meshes = getMeshes(this.collisionEntities);
   },
@@ -278,10 +278,7 @@ AFRAME.registerComponent("teleporter", {
     this.timeTeleporting += dt;
     object3D.updateMatrixWorld();
     object3D.matrixWorld.decompose(this.p0, q, vecHelper);
-    this.direction
-      .copy(FORWARD)
-      .applyQuaternion(q)
-      .normalize();
+    this.direction.copy(FORWARD).applyQuaternion(q).normalize();
     this.rayCurve.setDirection(this.direction);
     this.el.object3D.updateMatrices();
     const playerScale = v.setFromMatrixColumn(this.characterController.avatarPOV.object3D.matrixWorld, 1).length();

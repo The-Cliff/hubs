@@ -14,45 +14,39 @@ export function userFromPresence(sessionId, presence, micPresences, mySessionId)
 function usePeopleList(presences, mySessionId, micUpdateFrequency = 500) {
   const [people, setPeople] = useState([]);
 
-  useEffect(
-    () => {
-      let timeout;
+  useEffect(() => {
+    let timeout;
 
-      function updateMicrophoneState() {
-        const micPresences = getMicrophonePresences();
+    function updateMicrophoneState() {
+      const micPresences = getMicrophonePresences();
 
-        setPeople(
-          Object.entries(presences).map(([id, presence]) => {
-            return userFromPresence(id, presence, micPresences, mySessionId);
-          })
-        );
+      setPeople(
+        Object.entries(presences).map(([id, presence]) => {
+          return userFromPresence(id, presence, micPresences, mySessionId);
+        })
+      );
 
-        timeout = setTimeout(updateMicrophoneState, micUpdateFrequency);
-      }
+      timeout = setTimeout(updateMicrophoneState, micUpdateFrequency);
+    }
 
-      updateMicrophoneState();
+    updateMicrophoneState();
 
-      return () => {
-        clearTimeout(timeout);
-      };
-    },
-    [presences, micUpdateFrequency, setPeople, mySessionId]
-  );
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [presences, micUpdateFrequency, setPeople, mySessionId]);
 
   return people;
 }
 
 function PeopleListContainer({ hubChannel, people, onSelectPerson, onClose }) {
-  const onMuteAll = useCallback(
-    () => {
-      for (const person of people) {
-        if (person.presence === "room" && person.permissions && !person.permissions.mute_users) {
-          hubChannel.mute(person.id);
-        }
+  const onMuteAll = useCallback(() => {
+    for (const person of people) {
+      if (person.presence === "room" && person.permissions && !person.permissions.mute_users) {
+        hubChannel.mute(person.id);
       }
-    },
-    [people, hubChannel]
-  );
+    }
+  }, [people, hubChannel]);
 
   return (
     <PeopleSidebar

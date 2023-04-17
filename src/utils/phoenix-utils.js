@@ -339,7 +339,10 @@ export function discordBridgesForPresences(presences) {
   for (const p of Object.values(presences)) {
     for (const m of p.metas) {
       if (m.profile && m.profile.discordBridges) {
-        Array.prototype.push.apply(channels, m.profile.discordBridges.map(b => b.channel.name));
+        Array.prototype.push.apply(
+          channels,
+          m.profile.discordBridges.map(b => b.channel.name)
+        );
       }
     }
   }

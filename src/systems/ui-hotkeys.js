@@ -18,7 +18,7 @@ AFRAME.registerSystem("ui-hotkeys", {
     this.mediaSearchStore = window.APP.mediaSearchStore;
   },
 
-  tick: function() {
+  tick: function () {
     if (!this.userinput) {
       this.userinput = this.el.systems.userinput;
     }
