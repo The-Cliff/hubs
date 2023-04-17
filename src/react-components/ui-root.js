@@ -1470,7 +1470,7 @@ class UIRoot extends Component {
     return (
       <MoreMenuContextProvider>
         <ReactAudioContext.Provider value={this.state.audioContext}>
-          <div className="container" id="containerNftShop" style={{ "display":"none","pointerEvents": "auto", "userSelect": "none", "width":"50%", "height":"100%"}}></div>
+          <div className="container" id="containerNftShop" style={{ "display":"none","pointerEvents": "auto", "userSelect": "none", "width" :"calc(100vh * 16 / 9 )", "height": "80%"}}></div>
           <div className="container" id="containerRPM" style={{ "display":"none","pointerEvents": "auto", "userSelect": "none", "width":"40%", "height":"60%"}}></div>
 
             <div id="overlayForCenter" class="overlay" onClick={() => window.closeAll()}></div>

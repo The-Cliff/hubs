@@ -210,6 +210,7 @@ if (isEmbed && !qs.get("embed_token")) {
 
 
 import {ftrKeypadClass} from  "./metaoffice/ftr_keypad.js"
+import {ftrPetClass} from  "./metaoffice/ftr_pet.js"
 import {ftrNftShopClass} from  "./metaoffice/ftr_nftshop.js"
 import {ftrScreenClass} from  "./metaoffice/ftr_screen.js"
 import {ftrBackgroundMusicClass} from  "./metaoffice/ftr_backgroundmusic.js"
@@ -222,7 +223,7 @@ window.listFeatures = [];
 
  window.isNftShopOpen = false;
 
-window.room = "test";
+window.room = "test-local";
 if(window.location.href.includes("ispd-showroom")) window.room = "showroom";
 if(window.location.href.includes("ispd-sala1")) window.room = "meeting_1";
 if(window.location.href.includes("ispd-sala2")) window.room = "meeting_2";
@@ -1394,7 +1395,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // O] Preferences
-		store.update({ preferences: { enableDynamicShadows: true } });
+		if(window.room === "rooftop")
+			store.update({ preferences: { enableDynamicShadows: false } });
+		else
+			store.update({ preferences: { enableDynamicShadows: true } });
 
 		// A] Key pad
 	let ftrKeypad = new ftrKeypadClass();
@@ -1474,6 +1478,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 		window.listFeatures.push( ftrBackgroundMusic );
 	}
 
+		// E] Pet
+  if(qs.has("pet")) {
+		let ftrPet = new ftrPetClass();
+		ftrPet.init();
+		window.listFeatures.push( ftrPet );
+
+    let updatePointerPet = (i) => {
+      ftrPet.pointer.x = ( event.clientX / document.getElementsByTagName("canvas")[0].offsetWidth) * 2 - 1;
+      ftrPet.pointer.y = - ( event.clientY / document.getElementsByTagName("canvas")[0].offsetHeight ) * 2 + 1;
+    }
+
+    let updatePet = () => {
+      if(ftrPet.animToPlay != -1) {
+        ftrPet.playAnim(ftrPet.animToPlay)
+			  ftrPet.animToPlay = -1;
+      }
+    }
+
+    document.addEventListener( 'mousemove', updatePointerPet );
+    document.addEventListener( 'mousedown', updatePet );
+
+	}
 
 	// The big Loop, 
 	setInterval(() => {
