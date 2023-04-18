@@ -552,7 +552,7 @@ AFRAME.registerComponent("networked-drawing", {
       networkBufferCount: this.networkBufferCount,
       vertexCount: this.vertexCount - 1,
       indexCount: this.indexCount - 1,
-      time: this.el.sceneEl.clock.elapsedTime * 1000
+      time: APP.world.time.elapsed
     };
     this.networkBufferHistory.push(datum);
     this.vertexCount = 0;

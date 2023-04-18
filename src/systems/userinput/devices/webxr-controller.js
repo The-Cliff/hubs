@@ -21,8 +21,8 @@ export class WebXRControllerDevice {
     this.position = new THREE.Vector3();
     this.orientation = new THREE.Quaternion();
   }
-  write(frame, scene, referenceSpace) {
-    if (!referenceSpace || !this.gamepad) return;
+  write(frame, xrFrame, referenceSpace) {
+    if (!referenceSpace || !xrFrame || !this.gamepad) return;
 
     const hand = this.gamepad.hand || "right";
     const path = paths.device.webxr[hand];
@@ -79,7 +79,7 @@ export class WebXRControllerDevice {
 
     frame.setPose(path.pose, this.pose);
 
-    const pose = scene.frame.getPose(this.gamepad.targetRaySpace, referenceSpace);
+    const pose = xrFrame.getPose(this.gamepad.targetRaySpace, referenceSpace);
 
     if (pose && pose.transform.position && pose.transform.orientation) {
       this.position.copy(pose.transform.position);

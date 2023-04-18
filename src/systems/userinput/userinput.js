@@ -470,7 +470,7 @@ AFRAME.registerSystem("userinput", {
     }
   },
 
-  tick2() {
+  tick2(xrFrame) {
     this.frame.generation += 1;
     const registeredMappingsChanged = this.registeredMappingsChanged;
     if (registeredMappingsChanged) {
@@ -516,7 +516,7 @@ AFRAME.registerSystem("userinput", {
     }
 
     for (let i = 0; i < this.activeDevices.items.length; i++) {
-      this.activeDevices.items[i].write(this.frame, this.el.sceneEl, this.xrReferenceSpace);
+      this.activeDevices.items[i].write(this.frame, xrFrame, this.xrReferenceSpace);
     }
 
     for (let i = 0; i < this.sortedBindings.length; i++) {
