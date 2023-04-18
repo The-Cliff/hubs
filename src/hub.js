@@ -208,6 +208,7 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 
+import "./metaoffice/index";
 import { ftrKeypadClass } from "./metaoffice/ftr_keypad.js";
 import { ftrPetClass } from "./metaoffice/ftr_pet.js";
 import { ftrNftShopClass } from "./metaoffice/ftr_nftshop.js";
