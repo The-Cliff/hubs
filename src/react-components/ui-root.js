@@ -1369,7 +1369,7 @@ class UIRoot extends Component {
           }
 
           iframeNftShop.id = "iframeNftShop";
-          iframeNftShop.src = `https://vendormachine.ispdmetaoffice.com`;
+          iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com/`;
           iframeNftShop.className = "contentNftShop";
 
           window.isNftShopOpen = true;
@@ -1388,7 +1388,7 @@ class UIRoot extends Component {
         }
 
         iframeNftShop.id = "iframeNftShop";
-        iframeNftShop.src = `https://vendormachine.ispdmetaoffice.com`;
+        iframeNftShop.src = `https://vendormachine.ispd-metaoffice.com/`;
         iframeNftShop.className = "contentNftShop";
 
         window.isNftShopOpen = true;
