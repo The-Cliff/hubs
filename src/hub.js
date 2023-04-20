@@ -209,6 +209,7 @@ if (isEmbed && !qs.get("embed_token")) {
 }
 
 import "./metaoffice/index";
+import { METAOFFICE_NAMES } from "./metaoffice/ftr_consts";
 import { ftrKeypadClass } from "./metaoffice/ftr_keypad.js";
 import { ftrPetClass } from "./metaoffice/ftr_pet.js";
 import { ftrNftShopClass } from "./metaoffice/ftr_nftshop.js";
@@ -223,11 +224,11 @@ window.listFeatures = [];
 window.isNftShopOpen = false;
 
 window.room = "test-local";
-if (window.location.href.includes("ispd-showroom")) window.room = "showroom";
-if (window.location.href.includes("ispd-sala1")) window.room = "meeting_1";
-if (window.location.href.includes("ispd-sala2")) window.room = "meeting_2";
-if (window.location.href.includes("ispd-sala3")) window.room = "meeting_3";
-if (window.location.href.includes("ispd-terraza")) window.room = "rooftop";
+if (window.location.href.includes(METAOFFICE_NAMES.SALA_SHOWROOM)) window.room = METAOFFICE_NAMES.SALA_SHOWROOM;
+if (window.location.href.includes(METAOFFICE_NAMES.SALA_1)) window.room = METAOFFICE_NAMES.SALA_1;
+if (window.location.href.includes(METAOFFICE_NAMES.SALA_2)) window.room = METAOFFICE_NAMES.SALA_2;
+if (window.location.href.includes(METAOFFICE_NAMES.SALA_3)) window.room = METAOFFICE_NAMES.SALA_3;
+if (window.location.href.includes(METAOFFICE_NAMES.SALA_TERRAZA)) window.room = METAOFFICE_NAMES.SALA_TERRAZA;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -1392,7 +1393,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   linkChannel.setSocket(socket);
 
   // O] Preferences
-  if (window.room === "rooftop") store.update({ preferences: { enableDynamicShadows: false } });
+  if (window.room === METAOFFICE_NAMES.SALA_TERRAZA) store.update({ preferences: { enableDynamicShadows: false } });
   else store.update({ preferences: { enableDynamicShadows: true } });
 
   // A] Key pad
@@ -1438,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let linkRole = "";
       if (window.role !== "guest") linkRole = "?role=" + window.role;
 
-      let toShowroom = ftrKeypad.toLink.includes("showroom");
+      let toShowroom = ftrKeypad.toLink.includes(METAOFFICE_NAMES.SALA_SHOWROOM);
 
       window.location = ftrKeypad.toLink + linkRole + (toShowroom ? "#wpmainshowroom" : "");
     }
@@ -1449,7 +1450,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // B] Screen
   if (
     window.role === "speaker" &&
-    (window.room === "meeting_1" || window.room === "meeting_2" || window.room === "meeting_3")
+    (window.room === METAOFFICE_NAMES.SALA_1 ||
+      window.room === METAOFFICE_NAMES.SALA_2 ||
+      window.room === METAOFFICE_NAMES.SALA_3)
   ) {
     let ftrScreen = new ftrScreenClass();
     ftrScreen.init();
@@ -1457,7 +1460,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // C] Nft Shop
-  if (window.room === "showroom") {
+  if (window.room === METAOFFICE_NAMES.SALA_SHOWROOM) {
     let ftrNftShop = new ftrNftShopClass();
     ftrNftShop.init();
     window.listFeatures.push(ftrNftShop);
